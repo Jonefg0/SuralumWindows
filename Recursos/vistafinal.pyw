@@ -2,8 +2,10 @@ from tkinter import *
 import pika
 import json
 import cx_Oracle
+import os
 cx_Oracle.init_oracle_client(lib_dir=r"C:\Users\edgar\Downloads\instantclient-basic-windows.x64-19.10.0.0.0dbru\instantclient_19_10")
-
+connection_ddbb = cx_Oracle.connect('system','erty8040', "localhost")
+cursor = connection_ddbb.cursor()
 
 def menu_pantalla():
     global ventanamain
@@ -28,20 +30,21 @@ def menu_pantalla():
     
     ventanamain.mainloop()
 
+
 def validaciondatos():
-        connection_ddbb = cx_Oracle.connect('system','erty8040', "localhost")
-        cursor = connection_ddbb.cursor()
+        
 
     
-        print(nombreusuario_verify)
+        #print(nombreusuario_verify)
         user = str(nombreusuario_verify)
-        print(user,"dif/n")
+        #print(user,"dif/n")
         cursor.execute("SELECT password FROM  users WHERE username='"+nombreusuario_verify.get()+"' and password='"+contrasenausuario_verify.get()+"'")
         if (cursor.fetchall()):
-            print("INICIO CORRECTO")
+            #print("INICIO CORRECTO")
             ventana_principal()
         else:
-            print("ERROR DE CONTRASEÑA")
+            erro=3
+            #print("ERROR DE CONTRASEÑA")
 
 
         
@@ -96,15 +99,15 @@ def ventana_principal():
         connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
         channel = connection.channel()
         channel.queue_declare(queue='estadisticos')
-        print("los estadisticos son: ",seleccionados)
+        #print("los estadisticos son: ",seleccionados)
         msg = (periodos,"#",seleccionados)
-        print("mensaje que se envía es : ", msg)
+        #print("mensaje que se envía es : ", msg)
         channel.basic_publish(exchange='', routing_key='estadisticos', body = json.dumps(msg))
         seleccionados = [0,0,0,0,0,0,0]
         
 
     def agregar_periodo():
-        print(periodo.get())
+        #print(periodo.get())
         lista.insert(END,periodo.get())
         periodos.append(periodo.get())
 
@@ -117,7 +120,7 @@ def ventana_principal():
 
     def fin_todo():
         ventana.destroy
-        connection.close()
+        exit()
 
     #Ventana y variables
     ventana = Toplevel(ventanamain)

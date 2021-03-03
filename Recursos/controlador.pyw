@@ -17,6 +17,8 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.validators import Auto
 import pprint
 import locale
+
+
 usr='system'
 passw='erty8040'
 logotipo = "Recursos/imagenes/logo.png"
@@ -37,10 +39,10 @@ def main():
         aux = mensaje.split('#')
         periodos = aux[0][2:-4].split(",")
         descriptores = aux [1][4:-2].split(",")
-        print(periodos)
+        #print(periodos)
         a = periodos
         a.sort()
-        print(a)
+        #print(a)
         #valor = int(descriptores[0])
         #print("valor:",valor)
         #año = int(años_final[0][1:-1])
@@ -55,7 +57,7 @@ def main():
         styles.add(ParagraphStyle(name='Center', alignment=TA_CENTER))
 
         if (int(descriptores[0])):#VENTAS TOTALES
-            print("ventas_totales")
+            #print("ventas_totales")
             story.append(Paragraph('Ventas Totales por Año', styles['title']))
             totales = []
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
@@ -109,12 +111,13 @@ def main():
             #print(story)
    #############################################################################################################################################################
         if (int(descriptores[2][1:])):
-            print("ventas por familia")
+            #print("ventas por familia")
             story.append(Paragraph('Ventas por Familia', styles['title']))
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
             cursor = connection_ddbb.cursor()
             totales  = [('Periodo','Suralum','Huracan','Industrial')]
             valores_g = []
+            anos=[]
             for i in periodos:
                 cursor.execute("""SELECT
                 productos.id_familia,
@@ -128,6 +131,7 @@ def main():
                     productos.id_familia DESC
                 """)
                 vt=[(i)]
+                anos.append(i)                
                 vg =[]
                 for valor in cursor:
                     #print ("Values:", valor)
@@ -180,8 +184,7 @@ def main():
             legend.columnMaximum           = 9
             legend.fontSize                = 13
             # these data can be read from external sources
-
-            legend.colorNamePairs=Auto(obj=bc)
+            legend.colorNamePairs  = [(bc.bars[i].fillColor, anos[i]) for i in range(len(anos))]
             d.add(bc)
             d.add(legend)
             #pprint.pprint(bc.getProperties())
@@ -191,7 +194,7 @@ def main():
         
 
         if (int(descriptores[3][1:])):
-            print("Suralum")
+            #print("Suralum")
             story.append(Paragraph('Ventas Suralum', styles['title']))
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
             cursor = connection_ddbb.cursor()
@@ -239,7 +242,7 @@ def main():
         
 ############################################################################################################################
         if (int(descriptores[4][1:])):
-            print("Huracan")
+            #print("Huracan")
 
             story.append(Paragraph('Ventas Huracan', styles['title']))
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
@@ -292,7 +295,7 @@ def main():
 #######################################################################################################################################
 
         if (int(descriptores[5][1:])):
-            print("Industrial")
+            #print("Industrial")
 
             story.append(Paragraph('Ventas Industrial', styles['title']))
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
@@ -340,7 +343,7 @@ def main():
         
         
         if (int(descriptores[6][1:])):
-            print("mas vendido")
+            #print("mas vendido")
             story.append(Paragraph('PRODUCTOS MÁS VENDIDOS', styles['title']))
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
             cursor = connection_ddbb.cursor()
@@ -389,14 +392,14 @@ def main():
 
     
     channel.basic_consume(queue='estadisticos', on_message_callback = callback, auto_ack = True)
-    print("esperando mensajes: ")
+    #print("esperando mensajes: ")
     channel.start_consuming()
 
 if __name__=='__main__':
     try:
         main()
     except KeyboardInterrupt:
-        print('Se interrumpe')
+        #print('Se interrumpe')
         try:
             sys.exit(0)
         except SystemExit:
