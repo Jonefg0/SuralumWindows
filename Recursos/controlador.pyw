@@ -63,7 +63,7 @@ def main():
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
             cursor = connection_ddbb.cursor()   
             for i in periodos:
-                print()
+                #print()
                 cursor = connection_ddbb.cursor()
                 cursor.execute("SELECT id_venta, total, fecha FROM ventas WHERE EXTRACT(YEAR FROM fecha) = " + i)
                 total = 0
@@ -71,6 +71,7 @@ def main():
                     total = total+ fname[1]
                     #print ("Values:", fname[1])
                 totales.append(total)
+            #print(periodos)
             arreglo = [periodos,totales]
 
             table = Table(arreglo, colWidths=4* cm)

@@ -105,6 +105,9 @@ def ventana_principal():
         channel = connection.channel()
         channel.queue_declare(queue='estadisticos')
         #print("los estadisticos son: ",seleccionados)
+        #print(periodos)
+        periodos.sort() 
+        #print(periodos)
         msg = (periodos,"#",seleccionados)
         #print("mensaje que se envía es : ", msg)
         channel.basic_publish(exchange='', routing_key='estadisticos', body = json.dumps(msg))
@@ -122,6 +125,7 @@ def ventana_principal():
         for index in sel[::-1]:
             lista.delete(index)
             periodos.pop(index)
+            
 
     def fin_todo():
         ventana.destroy
