@@ -10,7 +10,7 @@ cursor = connection_ddbb.cursor()
 def menu_pantalla():
     global ventanamain
     ventanamain = Tk()
-    ventanamain.geometry("600x298")
+    ventanamain.geometry("500x300")
     ventanamain.title("Bienvenido al Sistema Suralum")
 
     global imagen, imagen2 
@@ -43,8 +43,13 @@ def validaciondatos():
             #print("INICIO CORRECTO")
             ventana_principal()
         else:
-            erro=3
             #print("ERROR DE CONTRASEÑA")
+            global ventana_error
+            ventana_error = Toplevel(ventana_sesion)
+            ventana_error.title("ERROR")
+            ventana_error.geometry("300x100")
+            Label(ventana_error, text="Usuario y/o Contraseña incorrecta ").pack()
+            Button(ventana_error, text="OK", command=ventana_error.destroy).pack()
 
 
         
