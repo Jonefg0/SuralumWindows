@@ -23,7 +23,7 @@ passw='erty8040'
 logotipo = "Recursos/imagenes/logo.png"
 head=('Producto','Total Ventas')
 m=6;
-cx_Oracle.init_oracle_client(lib_dir=r"C:\Users\edgar\Downloads\instantclient-basic-windows.x64-19.10.0.0.0dbru\instantclient_19_10")
+cx_Oracle.init_oracle_client(lib_dir=r"C:\Users\edgar\Documents\SuralumWindows\Recursos\instantclient-basic-windows.x64-19.10.0.0.0dbru\instantclient_19_10")
 def main():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host ='localhost'))
     channel = connection.channel()

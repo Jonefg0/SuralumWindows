@@ -3,7 +3,7 @@ import pika
 import json
 import cx_Oracle
 import os
-cx_Oracle.init_oracle_client(lib_dir=r"C:\Users\edgar\Downloads\instantclient-basic-windows.x64-19.10.0.0.0dbru\instantclient_19_10")
+cx_Oracle.init_oracle_client(lib_dir=r"C:\Users\edgar\Documents\SuralumWindows\Recursos\instantclient-basic-windows.x64-19.10.0.0.0dbru\instantclient_19_10")
 connection_ddbb = cx_Oracle.connect('system','erty8040', "localhost")
 cursor = connection_ddbb.cursor()
 
@@ -154,21 +154,21 @@ def ventana_principal():
     Label(ventana, image = imagen).place(x=-2,y=-2)
 
     #cabeceratitulo = Label(ventana,text = "Estadisticas Suralum", bg = '#FFF9C2',fg = '#274a99', font = ("Helvetica",24,"bold")).place(x=230,y=80)
-    titulo = Label(ventana,text = "Estadisticas Suralum", bg = '#FFF9C2',fg = '#274a99', font = ("Helvetica",24,"bold")).place(x=230,y=80)
+    titulo = Label(ventana,text = "Estadisticas Suralum", bg = 'white',fg = "white", font = ("Helvetica",24,"bold")).place(x=230,y=80)
     #descriptores
-    titulo_descriptores = Label(ventana,text = "Descriptores", font = ("Helvetica",18,"bold"),bg = '#FFF9C2').place(x = 450, y = 170)
+    titulo_descriptores = Label(ventana,text = "Descriptores", font = ("Helvetica",18,"bold"),bg =  'white').place(x = 450, y = 170)
 
-    vt_button = Checkbutton(ventana,text="Ventas Totales",onvalue = 1,offvalue = 0, variable = estadistico_1, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 210)
-    vxf_button = Checkbutton(ventana,text="Ventas por familia", onvalue = 1,offvalue = 0, variable = estadistico_2, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 240)
-    vxs_button = Checkbutton(ventana,text="Ventas Suralum", onvalue = 1,offvalue = 0, variable = estadistico_3, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 270)
-    vxh_button = Checkbutton(ventana,text="Ventas Huracán",onvalue = 1,offvalue = 0, variable = estadistico_4, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 300)
-    vxi_button = Checkbutton(ventana,text="Ventas Industrial",onvalue = 1,offvalue = 0, variable = estadistico_5, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 330)
-    pmv_button = Checkbutton(ventana,text="Producto más vendido",onvalue = 1,offvalue = 0, variable = estadistico_6, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 360)
+    vt_button = Checkbutton(ventana,text="Ventas Totales",onvalue = 1,offvalue = 0, variable = estadistico_1, font = ("Helvetica",14),bg = 'white').place(x = 450, y = 210)
+    vxf_button = Checkbutton(ventana,text="Ventas por familia", onvalue = 1,offvalue = 0, variable = estadistico_2, font = ("Helvetica",14),bg =  'white').place(x = 450, y = 240)
+    vxs_button = Checkbutton(ventana,text="Ventas Suralum", onvalue = 1,offvalue = 0, variable = estadistico_3, font = ("Helvetica",14),bg =  'white').place(x = 450, y = 270)
+    vxh_button = Checkbutton(ventana,text="Ventas Huracán",onvalue = 1,offvalue = 0, variable = estadistico_4, font = ("Helvetica",14),bg =  'white').place(x = 450, y = 300)
+    vxi_button = Checkbutton(ventana,text="Ventas Industrial",onvalue = 1,offvalue = 0, variable = estadistico_5, font = ("Helvetica",14),bg = 'white').place(x = 450, y = 330)
+    pmv_button = Checkbutton(ventana,text="Producto más vendido",onvalue = 1,offvalue = 0, variable = estadistico_6, font = ("Helvetica",14),bg =  'white').place(x = 450, y = 360)
 
 
     #ingreso de periodos
-    titulo_fechas = Label(ventana,text = "Periodos", font = ("Helvetica",18,"bold"),bg = '#FFF9C2').place(x = 20, y = 140 )
-    cta_fechas = Label(ventana, text = "Ingrese año: ", font = ("Helvetica",14),bg = '#FFF9C2').place(x = 20, y = 180)
+    titulo_fechas = Label(ventana,text = "Periodos", font = ("Helvetica",18,"bold"),bg = 'white').place(x = 20, y = 140 )
+    cta_fechas = Label(ventana, text = "Ingrese año: ", font = ("Helvetica",14),bg = 'white').place(x = 20, y = 180)
     caja_año = Entry(ventana, textvar = periodo, font = ("Helvetica",14),bg = "white",width = "6").place(x = 140, y = 180)
     f_button = Button(ventana, text ="Agregar",font = ("Helvetica",12),bg = '#274a99', fg="white", command = agregar_periodo).place(x = 220, y = 178)
 
@@ -182,7 +182,7 @@ def ventana_principal():
     r_button = Button(ventana, text = "Generar reporte", padx = 10, pady = 10, bg = '#274a99', fg="white", width=13, command = generar_reporte, font = ("Helvetica",14)).place(x = 600, y = 520 )
 
     #botón cerrar sesión
-    c_button = Button(ventana, text ="Cerrar Sesión",font = ("Helvetica",12),bg = '#274a99', fg="white", command=fin_todo).place(x = 600, y = 25)
+    c_button = Button(ventana, text ="Cerrar Sesión",font = ("Helvetica",12),bg = '#274a99', fg="white", command=fin_todo).place(x = 580, y = 25)
 
 
 
