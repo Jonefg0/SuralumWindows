@@ -12,6 +12,7 @@ def menu_pantalla():
     ventanamain = Tk()
     ventanamain.geometry("500x300")
     ventanamain.title("Bienvenido al Sistema Suralum")
+    ventanamain.iconbitmap('Recursos/imagenes/log_1.ico')
 
     global imagen, imagen2 
     imagen = PhotoImage(file = "Recursos/imagenes/bg.png")
@@ -48,6 +49,7 @@ def validaciondatos():
             ventana_error = Toplevel(ventana_sesion)
             ventana_error.title("ERROR")
             ventana_error.geometry("300x100")
+            ventana_error.iconbitmap('Recursos/imagenes/log_1.ico')
             Label(ventana_error, text="Usuario y/o Contraseña incorrecta ").pack()
             Button(ventana_error, text="OK", command=ventana_error.destroy).pack()
 
@@ -60,6 +62,7 @@ def inicio_sesion():
     ventana_sesion = Toplevel(ventanamain)
     ventana_sesion.geometry("500x300")
     ventana_sesion.title("Inicio de sesion")
+    ventana_sesion.iconbitmap('Recursos/imagenes/log_1.ico')
     ventana_sesion.resizable(width=False, height=False)
 
     Label(ventana_sesion, image = imagen2).place(x=-2,y=-2)
@@ -134,6 +137,7 @@ def ventana_principal():
     ventana = Toplevel(ventanamain)
     ventana.geometry("800x600")
     ventana.title("Estadisticas Suralum")
+    ventana.iconbitmap('Recursos/imagenes/log_1.ico')
     #frame_fechas = Frame(ventana,bg = "black").place(x = 500,y = 200)
     estadistico_1 = IntVar()
     estadistico_2 = IntVar()
