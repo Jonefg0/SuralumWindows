@@ -100,7 +100,6 @@ def ventana_principal():
         seleccionados[3] = estadistico_4.get()
         seleccionados[4] = estadistico_5.get()
         seleccionados[5] = estadistico_6.get()
-        seleccionados[6] = estadistico_7.get()
         connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
         channel = connection.channel()
         channel.queue_declare(queue='estadisticos')
@@ -111,7 +110,7 @@ def ventana_principal():
         msg = (periodos,"#",seleccionados)
         #print("mensaje que se envía es : ", msg)
         channel.basic_publish(exchange='', routing_key='estadisticos', body = json.dumps(msg))
-        seleccionados = [0,0,0,0,0,0,0]
+        seleccionados = [0,0,0,0,0,0]
         
 
     def agregar_periodo():
@@ -142,7 +141,6 @@ def ventana_principal():
     estadistico_4 = IntVar()
     estadistico_5 = IntVar()
     estadistico_6 = IntVar()
-    estadistico_7 = IntVar()
     periodo = StringVar()
     periodos = []
     #imagen = PhotoImage(file = "bg.png")
@@ -154,15 +152,14 @@ def ventana_principal():
     #cabeceratitulo = Label(ventana,text = "Estadisticas Suralum", bg = '#FFF9C2',fg = '#274a99', font = ("Helvetica",24,"bold")).place(x=230,y=80)
     titulo = Label(ventana,text = "Estadisticas Suralum", bg = '#FFF9C2',fg = '#274a99', font = ("Helvetica",24,"bold")).place(x=230,y=80)
     #descriptores
-    titulo_descriptores = Label(ventana,text = "Descriptores", font = ("Helvetica",18,"bold"),bg = '#FFF9C2').place(x = 450, y = 140)
+    titulo_descriptores = Label(ventana,text = "Descriptores", font = ("Helvetica",18,"bold"),bg = '#FFF9C2').place(x = 450, y = 170)
 
-    vt_button = Checkbutton(ventana,text="Ventas Totales",onvalue = 1,offvalue = 0, variable = estadistico_1, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 180)
-    vxl_button = Checkbutton(ventana,text="Ventas por línea",onvalue = 1,offvalue = 0, variable = estadistico_2, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 210)
-    vxf_button = Checkbutton(ventana,text="Ventas por familia", onvalue = 1,offvalue = 0, variable = estadistico_3, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 240)
-    vxs_button = Checkbutton(ventana,text="Ventas Suralum", onvalue = 1,offvalue = 0, variable = estadistico_4, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 270)
-    vxh_button = Checkbutton(ventana,text="Ventas Huracán",onvalue = 1,offvalue = 0, variable = estadistico_5, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 300)
-    vxi_button = Checkbutton(ventana,text="Ventas Industrial",onvalue = 1,offvalue = 0, variable = estadistico_6, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 330)
-    pmv_button = Checkbutton(ventana,text="Producto más vendido",onvalue = 1,offvalue = 0, variable = estadistico_7, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 360)
+    vt_button = Checkbutton(ventana,text="Ventas Totales",onvalue = 1,offvalue = 0, variable = estadistico_1, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 210)
+    vxf_button = Checkbutton(ventana,text="Ventas por familia", onvalue = 1,offvalue = 0, variable = estadistico_2, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 240)
+    vxs_button = Checkbutton(ventana,text="Ventas Suralum", onvalue = 1,offvalue = 0, variable = estadistico_3, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 270)
+    vxh_button = Checkbutton(ventana,text="Ventas Huracán",onvalue = 1,offvalue = 0, variable = estadistico_4, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 300)
+    vxi_button = Checkbutton(ventana,text="Ventas Industrial",onvalue = 1,offvalue = 0, variable = estadistico_5, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 330)
+    pmv_button = Checkbutton(ventana,text="Producto más vendido",onvalue = 1,offvalue = 0, variable = estadistico_6, font = ("Helvetica",14),bg = '#FFF9C2').place(x = 450, y = 360)
 
 
     #ingreso de periodos

@@ -38,12 +38,6 @@ def main():
         aux = mensaje.split('#')
         periodos = aux[0][2:-4].split(",")
         descriptores = aux [1][4:-2].split(",")
-        #print(periodos)
-        #valor = int(descriptores[0])
-        #print("valor:",valor)
-        #año = int(años_final[0][1:-1])
-        #print("descriptores: ",descriptores)
-        #print("periodos ",periodos)
         doc = SimpleDocTemplate("PDFs/SURALUM.pdf", pagesize=letter)
         story = []
         imagen = Image(logotipo, 7 * cm, 3 * cm)
@@ -109,11 +103,10 @@ def main():
             bc.valueAxis.labelTextFormat = ' $%d '
             bc.barLabels.nudge = 7
             d.add(bc)
-            #pprint.pprint(bc.getProperties())
             story.append(d)
             #print(story)
    #############################################################################################################################################################
-        if (int(descriptores[2][1:])):
+        if (int(descriptores[1][1:])):
             #print("ventas por familia")
             story.append(Paragraph('Ventas por Familia', styles['title']))
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
@@ -137,10 +130,8 @@ def main():
                 anos.append(i)                
                 vg =[]
                 for valor in cursor:
-                    #print ("Values:", valor)
                     vt.append(valor[1])
                     vg.append(valor[1])
-                    #print(vt)
                 totales.append(vt)
                 valores_g.append(vg)
 
@@ -190,13 +181,11 @@ def main():
             legend.colorNamePairs  = [(bc.bars[i].fillColor, anos[i]) for i in range(len(anos))]
             d.add(bc)
             d.add(legend)
-            #pprint.pprint(bc.getProperties())
             story.append(d)
-            #print(totales)
 
         
 
-        if (int(descriptores[3][1:])):
+        if (int(descriptores[2][1:])):
             #print("Suralum")
             story.append(Paragraph('Ventas Suralum', styles['title']))
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
@@ -244,7 +233,7 @@ def main():
 
         
 ############################################################################################################################
-        if (int(descriptores[4][1:])):
+        if (int(descriptores[3][1:])):
             #print("Huracan")
 
             story.append(Paragraph('Ventas Huracan', styles['title']))
@@ -271,7 +260,7 @@ def main():
                 totales.append(head)
                 for valor in cursor:
                     producto = []
-                    if (k < 12):
+                    if (k < 26):
                         producto.append(valor[0])#nombre
                         producto.append(valor[1])#totales_ccantidad
                         producto.append(valor[2])#totales_ventas
@@ -297,7 +286,7 @@ def main():
 
 #######################################################################################################################################
 
-        if (int(descriptores[5][1:])):
+        if (int(descriptores[4][1:])):
             #print("Industrial")
 
             story.append(Paragraph('Ventas Industrial', styles['title']))
@@ -324,7 +313,7 @@ def main():
                 totales.append(head)
                 for valor in cursor:
                     producto = []
-                    if (k < 12):
+                    if (k < 26):
                         producto.append(valor[0])#nombre
                         producto.append(valor[1])#totales_ccantidad
                         producto.append(valor[2])#totales_ventas
@@ -345,7 +334,7 @@ def main():
                 story.append(Spacer(10, 20))
         
         
-        if (int(descriptores[6][1:])):
+        if (int(descriptores[5][1:])):
             #print("mas vendido")
             story.append(Paragraph('PRODUCTOS MÁS VENDIDOS', styles['title']))
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
