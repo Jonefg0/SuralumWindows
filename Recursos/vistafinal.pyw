@@ -6,7 +6,6 @@ import os
 cx_Oracle.init_oracle_client(lib_dir=r"C:\Users\edgar\Documents\SuralumWindows\Recursos\instantclient-basic-windows.x64-19.10.0.0.0dbru\instantclient_19_10")
 connection_ddbb = cx_Oracle.connect('system','erty8040', "localhost")
 cursor = connection_ddbb.cursor()
-
 def menu_pantalla():
     global ventanamain
     ventanamain = Tk()
@@ -114,12 +113,35 @@ def ventana_principal():
         #print("mensaje que se envía es : ", msg)
         channel.basic_publish(exchange='', routing_key='estadisticos', body = json.dumps(msg))
         seleccionados = [0,0,0,0,0,0]
+        periodos = []
         
 
     def agregar_periodo():
-        #print(periodo.get())
-        lista.insert(END,periodo.get())
-        periodos.append(periodo.get())
+
+
+
+        if (periodo.get()=='2020' or periodo.get()=='2019' or periodo.get()=='2018' or periodo.get()=='2017' or periodo.get()=='2016' or periodo.get()=='2016'):
+            #print(periodo.get())
+            if (periodo.get() in periodos ):
+                global duplicado
+                duplicado = Toplevel(ventana)
+                duplicado.title("ERROR")
+                duplicado.geometry("300x100")
+                duplicado.iconbitmap('Recursos/imagenes/log_1.ico')
+                Label(duplicado, text="Ya ingreso este año ").pack()
+                Button(duplicado, text="OK", command=duplicado.destroy).pack()
+
+            else:
+                lista.insert(END,periodo.get())
+                periodos.append(periodo.get())
+        else:
+            global ventana_error_ano
+            ventana_error_ano = Toplevel(ventana)
+            ventana_error_ano.title("ERROR")
+            ventana_error_ano.geometry("300x100")
+            ventana_error_ano.iconbitmap('Recursos/imagenes/log_1.ico')
+            Label(ventana_error_ano, text="Error en la entrada o año no disponible").pack()
+            Button(ventana_error_ano, text="OK", command=ventana_error_ano.destroy).pack()
 
 
     def borrar_periodo():
@@ -146,7 +168,7 @@ def ventana_principal():
     estadistico_5 = IntVar()
     estadistico_6 = IntVar()
     periodo = StringVar()
-    periodos = []
+    
     #imagen = PhotoImage(file = "bg.png")
     #Label(ventana,image=imagen).place(x=0,y=0)
     ventana.resizable(width=False, height=False)

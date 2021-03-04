@@ -21,7 +21,7 @@ import locale
 usr='system'
 passw='erty8040'
 logotipo = "Recursos/imagenes/logo.png"
-head=('Producto','Total Ventas')
+head=('Producto','total cantidad','Total Ventas')
 m=6;
 cx_Oracle.init_oracle_client(lib_dir=r"C:\Users\edgar\Documents\SuralumWindows\Recursos\instantclient-basic-windows.x64-19.10.0.0.0dbru\instantclient_19_10")
 def main():
@@ -166,7 +166,7 @@ def main():
             bc.valueAxis.labelTextFormat = ' $%d '
             bc.groupSpacing = 10
             bc.barSpacing = 4
-            bc.barLabelFormat = '$%d'
+            if len(anos)<3:bc.barLabelFormat = '$%d'
             bc.barLabels.nudge = 7
 
             legend=Legend()
@@ -193,18 +193,18 @@ def main():
             
             for i in periodos:
                 #print("para el periodo:",i)
-                cursor.execute("""select p.descripcion,SUM(ROUND(ROUND(ROUND(ROUND(vp.cantidad * vp.precio * (CASE WHEN v.OpeId IN (33, 56) THEN 1 ELSE -1 END) * ((100 - v.Descuento1) / 100), 0) * ((100 - v.Descuento2) / 100), 0) * ((100 + v.recuperacion_flete) / 100), 0) * 1.19, 0))  Total  
-                    from Ventas v, Venta_Productos vp, Productos p, familia f
-                    where v.id_venta = vp.id_venta
-                    and EXTRACT(YEAR FROM v.fecha) = """+i+"""
-                    and v.OpeId IN (33, 56, 61)
-                    and vp.id_producto = p.id_producto
-                    and p.id_familia = f.id_familia
-                    and f.descripcion_familia = 'SURALUM'  -- Familia de Productos
-                    and p.id_producto NOT IN (SELECT id_producto1 FROM PRODUCTOS_MIXTOS UNION SELECT id_producto2 FROM PRODUCTOS_MIXTOS)
-                    and v.ParOpeEstado IN (2, 3, 5) 
-                    group by p.descripcion
-                    order by total desc""")
+                cursor.execute("""select p.descripcion, SUM(vp.cantidad), SUM(ROUND(ROUND(ROUND(ROUND(vp.cantidad * vp.precio * (CASE WHEN v.OpeId IN (33, 56) THEN 1 ELSE -1 END) * ((100 - v.Descuento1) / 100), 0) * ((100 - v.Descuento2) / 100), 0) * ((100 + v.recuperacion_flete) / 100), 0) * 1.19, 0))  Total
+                from Ventas v, Venta_Productos vp, Productos p, familia f
+                where v.id_venta = vp.id_venta
+                and EXTRACT(YEAR FROM v.fecha) = """+i+"""
+                and v.OpeId IN (33, 56, 61)
+                and vp.id_producto = p.id_producto
+                and p.id_familia = f.id_familia
+                and f.descripcion_familia = 'SURALUM'  -- Familia de Productos
+                and p.id_producto NOT IN (SELECT id_producto1 FROM PRODUCTOS_MIXTOS UNION SELECT id_producto2 FROM PRODUCTOS_MIXTOS)
+                and v.ParOpeEstado IN (2, 3, 5) 
+                group by p.descripcion
+                order by total desc""")
                 #AGREGAR TITULO DEL PERIODO AL STORY PARA SEPARAR LAS TABLAS
                 story.append(Paragraph('Año:'+i, styles['Center']))
                 k= 0
@@ -214,8 +214,8 @@ def main():
                     producto = []
                     if (k < 26):
                         producto.append(valor[0])#nombre
-                        #producto.append(valor[1])#totales_ccantidad
-                        producto.append(valor[1])#totales_ventas
+                        producto.append(valor[1])#totales_ccantidad
+                        producto.append(valor[2])#totales_ventas
                         totales.append(producto)
                     k = k+1
                 table = Table(totales, colWidths=m*cm)
@@ -241,20 +241,21 @@ def main():
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
             cursor = connection_ddbb.cursor()
             
+            #print("para el periodo:",i)
             for i in periodos:
                 #print("para el periodo:",i)
-                cursor.execute("""select p.descripcion,SUM(ROUND(ROUND(ROUND(ROUND(vp.cantidad * vp.precio * (CASE WHEN v.OpeId IN (33, 56) THEN 1 ELSE -1 END) * ((100 - v.Descuento1) / 100), 0) * ((100 - v.Descuento2) / 100), 0) * ((100 + v.recuperacion_flete) / 100), 0) * 1.19, 0))  Total  
-                    from Ventas v, Venta_Productos vp, Productos p, familia f
-                    where v.id_venta = vp.id_venta
-                    and EXTRACT(YEAR FROM v.fecha) = """+i+"""
-                    and v.OpeId IN (33, 56, 61)
-                    and vp.id_producto = p.id_producto
-                    and p.id_familia = f.id_familia
-                    and f.descripcion_familia = 'HURACAN'  -- Familia de Productos
-                    and p.id_producto NOT IN (SELECT id_producto1 FROM PRODUCTOS_MIXTOS UNION SELECT id_producto2 FROM PRODUCTOS_MIXTOS)
-                    and v.ParOpeEstado IN (2, 3, 5) 
-                    group by p.descripcion
-                    order by total desc""")
+                cursor.execute("""select p.descripcion, SUM(vp.cantidad), SUM(ROUND(ROUND(ROUND(ROUND(vp.cantidad * vp.precio * (CASE WHEN v.OpeId IN (33, 56) THEN 1 ELSE -1 END) * ((100 - v.Descuento1) / 100), 0) * ((100 - v.Descuento2) / 100), 0) * ((100 + v.recuperacion_flete) / 100), 0) * 1.19, 0))  Total
+                from Ventas v, Venta_Productos vp, Productos p, familia f
+                where v.id_venta = vp.id_venta
+                and EXTRACT(YEAR FROM v.fecha) = """+i+"""
+                and v.OpeId IN (33, 56, 61)
+                and vp.id_producto = p.id_producto
+                and p.id_familia = f.id_familia
+                and f.descripcion_familia = 'HURACAN'  -- Familia de Productos
+                and p.id_producto NOT IN (SELECT id_producto1 FROM PRODUCTOS_MIXTOS UNION SELECT id_producto2 FROM PRODUCTOS_MIXTOS)
+                and v.ParOpeEstado IN (2, 3, 5) 
+                group by p.descripcion
+                order by total desc""")
                 #AGREGAR TITULO DEL PERIODO AL STORY PARA SEPARAR LAS TABLAS
                 story.append(Paragraph('Año:'+i, styles['Center']))
                 k= 0
@@ -264,8 +265,8 @@ def main():
                     producto = []
                     if (k < 26):
                         producto.append(valor[0])#nombre
-                        #producto.append(valor[1])#totales_ccantidad
-                        producto.append(valor[1])#totales_ventas
+                        producto.append(valor[1])#totales_ccantidad
+                        producto.append(valor[2])#totales_ventas
                         totales.append(producto)
                     k = k+1
 
@@ -295,20 +296,21 @@ def main():
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
             cursor = connection_ddbb.cursor()
             
+           #print("para el periodo:",i)
             for i in periodos:
                 #print("para el periodo:",i)
-                cursor.execute("""select p.descripcion,SUM(ROUND(ROUND(ROUND(ROUND(vp.cantidad * vp.precio * (CASE WHEN v.OpeId IN (33, 56) THEN 1 ELSE -1 END) * ((100 - v.Descuento1) / 100), 0) * ((100 - v.Descuento2) / 100), 0) * ((100 + v.recuperacion_flete) / 100), 0) * 1.19, 0))  Total  
-                    from Ventas v, Venta_Productos vp, Productos p, familia f
-                    where v.id_venta = vp.id_venta
-                    and EXTRACT(YEAR FROM v.fecha) = """+i+"""
-                    and v.OpeId IN (33, 56, 61)
-                    and vp.id_producto = p.id_producto
-                    and p.id_familia = f.id_familia
-                    and f.descripcion_familia = 'INDUSTRIAL'  -- Familia de Productos
-                    and p.id_producto NOT IN (SELECT id_producto1 FROM PRODUCTOS_MIXTOS UNION SELECT id_producto2 FROM PRODUCTOS_MIXTOS)
-                    and v.ParOpeEstado IN (2, 3, 5) 
-                    group by p.descripcion
-                    order by total desc""")
+                cursor.execute("""select p.descripcion, SUM(vp.cantidad), SUM(ROUND(ROUND(ROUND(ROUND(vp.cantidad * vp.precio * (CASE WHEN v.OpeId IN (33, 56) THEN 1 ELSE -1 END) * ((100 - v.Descuento1) / 100), 0) * ((100 - v.Descuento2) / 100), 0) * ((100 + v.recuperacion_flete) / 100), 0) * 1.19, 0))  Total
+                from Ventas v, Venta_Productos vp, Productos p, familia f
+                where v.id_venta = vp.id_venta
+                and EXTRACT(YEAR FROM v.fecha) = """+i+"""
+                and v.OpeId IN (33, 56, 61)
+                and vp.id_producto = p.id_producto
+                and p.id_familia = f.id_familia
+                and f.descripcion_familia = 'INDUSTRIAL'  -- Familia de Productos
+                and p.id_producto NOT IN (SELECT id_producto1 FROM PRODUCTOS_MIXTOS UNION SELECT id_producto2 FROM PRODUCTOS_MIXTOS)
+                and v.ParOpeEstado IN (2, 3, 5) 
+                group by p.descripcion
+                order by total desc""")
                 #AGREGAR TITULO DEL PERIODO AL STORY PARA SEPARAR LAS TABLAS
                 story.append(Paragraph('Año:'+i, styles['Center']))
                 k= 0
@@ -318,8 +320,8 @@ def main():
                     producto = []
                     if (k < 26):
                         producto.append(valor[0])#nombre
-                        #producto.append(valor[1])#totales_ccantidad
-                        producto.append(valor[1])#totales_ventas
+                        producto.append(valor[1])#totales_ccantidad
+                        producto.append(valor[2])#totales_ventas
                         totales.append(producto)
                     k = k+1
                 table = Table(totales, colWidths=m*cm)
@@ -343,16 +345,16 @@ def main():
             connection_ddbb = cx_Oracle.connect(usr, passw, "localhost")
             cursor = connection_ddbb.cursor()
             for i in periodos:
-                cursor.execute("""select p.descripcion, SUM(ROUND(ROUND(ROUND(ROUND(vp.cantidad * vp.precio * (CASE WHEN v.OpeId IN (33, 56) THEN 1 ELSE -1 END) * ((100 - v.Descuento1) / 100), 0) * ((100 - v.Descuento2) / 100), 0) * ((100 + v.recuperacion_flete) / 100), 0) * 1.19, 0))  Total  
-                    from Ventas v, Venta_Productos vp, Productos p
-                    where v.id_venta = vp.id_venta
-                    and EXTRACT(YEAR FROM v.fecha) = """+i+"""
-                    and v.OpeId IN (33, 56, 61)
-                    and vp.id_producto = p.id_producto
-                    and p.id_producto NOT IN (SELECT id_producto1 FROM PRODUCTOS_MIXTOS UNION SELECT id_producto2 FROM PRODUCTOS_MIXTOS)
-                    and v.ParOpeEstado IN (2, 3, 5) 
-                    group by p.descripcion
-                    order by total desc"""
+                cursor.execute("""select p.descripcion, SUM(vp.cantidad), SUM(ROUND(ROUND(ROUND(ROUND(vp.cantidad * vp.precio * (CASE WHEN v.OpeId IN (33, 56) THEN 1 ELSE -1 END) * ((100 - v.Descuento1) / 100), 0) * ((100 - v.Descuento2) / 100), 0) * ((100 + v.recuperacion_flete) / 100), 0) * 1.19, 0))  Total
+                from Ventas v, Venta_Productos vp, Productos p
+                where v.id_venta = vp.id_venta
+                and EXTRACT(YEAR FROM v.fecha) = """+i+"""
+                and v.OpeId IN (33, 56, 61)
+                and vp.id_producto = p.id_producto
+                and p.id_producto NOT IN (SELECT id_producto1 FROM PRODUCTOS_MIXTOS UNION SELECT id_producto2 FROM PRODUCTOS_MIXTOS)
+                and v.ParOpeEstado IN (2, 3, 5) 
+                group by p.descripcion
+                order by total desc"""
                 )
                 story.append(Paragraph('Año:'+i, styles['Center']))
                 k= 0
@@ -363,7 +365,7 @@ def main():
                     if (k < 26):
                         producto.append(valor[0])#nombre
                         producto.append(valor[1])#totales_ccantidad
-                        #producto.append(valor[2])#totales_ventas
+                        producto.append(valor[2])#totales_ventas
                         #producto.append(valor[3])#familia
                         totales.append(producto)
                     k = k+1
