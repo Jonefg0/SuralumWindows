@@ -15,7 +15,6 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.colors import Color, PCMYKColor
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.validators import Auto
-import pprint
 import locale
 
 
@@ -40,9 +39,6 @@ def main():
         periodos = aux[0][2:-4].split(",")
         descriptores = aux [1][4:-2].split(",")
         #print(periodos)
-        a = periodos
-        a.sort()
-        #print(a)
         #valor = int(descriptores[0])
         #print("valor:",valor)
         #año = int(años_final[0][1:-1])
@@ -65,10 +61,16 @@ def main():
             for i in periodos:
                 #print()
                 cursor = connection_ddbb.cursor()
-                cursor.execute("SELECT id_venta, total, fecha FROM ventas WHERE EXTRACT(YEAR FROM fecha) = " + i)
+                cursor.execute("""select SUM(ROUND(ROUND(ROUND(ROUND(vp.cantidad * vp.precio * (CASE WHEN v.OpeId IN (33, 56) THEN 1 ELSE -1 END) * ((100 - v.Descuento1) / 100), 0) * ((100 - v.Descuento2) / 100), 0) * ((100 + v.recuperacion_flete) / 100), 0) * 1.19, 0))  Total  
+                from Ventas v, Venta_Productos vp, Productos p
+                where v.id_venta = vp.id_venta
+                and EXTRACT(YEAR FROM v.fecha) = """+i+"""
+                and v.OpeId IN (33, 56, 61)
+                and vp.id_producto = p.id_producto
+                and v.ParOpeEstado IN (2, 3, 5)""")
                 total = 0
                 for fname in cursor:
-                    total = total+ fname[1]
+                    total = total+ fname[0]
                     #print ("Values:", fname[1])
                 totales.append(total)
             #print(periodos)
@@ -94,7 +96,7 @@ def main():
             bc.data = data
             bc.strokeColor = colors.black
             bc.valueAxis.valueMin = 0
-            bc.valueAxis.valueMax = 1000000000
+            bc.valueAxis.valueMax = 700000000
             bc.valueAxis.valueStep = 100000000  #paso de distancia entre punto y punto
             bc.categoryAxis.labels.boxAnchor = 'ne'
             bc.categoryAxis.labels.dx = 8
